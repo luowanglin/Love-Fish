@@ -10,7 +10,7 @@
 
 Using Bezier curve animation for project ,building at Xcode ,runing at the ipad min
 
-The game idea from to @www.imooc.com ,whit image files .Thanks!
+The game idea from to @www.imooc.com ,with image source .Thanks!
 
 Program language :Objective-C
 
