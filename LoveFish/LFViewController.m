@@ -6,26 +6,29 @@
 //  Copyright © 2016年 com.luowanglin. All rights reserved.
 //768 x 1024
 
-#import "ViewController.h"
+#import "LFViewController.h"
+#import "LFFish.h"
 
 
-@interface ViewController ()
+@interface LFViewController ()
 {
-    UIView *motherFish;
-    UIImageView *motherBody;
-    UIImageView *motherTail;
-    UIImageView *motherEye;
-    UIView *childFish;
-    UIImageView *childBody;
-    UIImageView *childTail;
-    UIImageView *childEye;
+//    UIView *motherFish;
+//    UIImageView *motherBody;
+//    UIImageView *motherTail;
+//    UIImageView *motherEye;
+//    UIView *childFish;
+//    UIImageView *childBody;
+//    UIImageView *childTail;
+//    UIImageView *childEye;
+    LFFish *mother;
+    LFFish *child;
     
-    NSMutableArray *bigTails;
-    NSMutableArray *bigEyes;
-    NSMutableArray *bigSwimS;
-    NSMutableArray *bigSwimBlueS;
-    NSMutableArray *babyEyes;
-    NSMutableArray *babyTails;
+//    NSMutableArray *bigTails;
+//    NSMutableArray *bigEyes;
+//    NSMutableArray *bigSwimS;
+//    NSMutableArray *bigSwimBlueS;
+//    NSMutableArray *babyEyes;
+//    NSMutableArray *babyTails;
     NSMutableArray *babyFades;
     NSMutableArray *dustImgs;
     NSMutableArray *fruits;
@@ -93,7 +96,7 @@
 }
 @end
 
-@implementation ViewController
+@implementation LFViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -108,9 +111,6 @@
         endYs[i] = endY;
     }
     [self wellcomeInterface];
-//    [self initForBegin];
-//    [self startDisplay];
-
 
 }
 
@@ -121,13 +121,13 @@
         isStopFishRandomMove = YES;
         if (!iswellcomeNoTouch) {
             [UIView animateWithDuration:1.f animations:^{
-                [motherFish setTransform:(CGAffineTransformMakeRotation([self autoRotateAngleWithDistin:fishMoveDestinPoint]))];
-                [childFish setTransform:(CGAffineTransformMakeRotation([self autoRotateAngleWithDistin:fishMoveDestinPoint]))];
-                motherFish.center = fishMoveDestinPoint;
+                [mother setTransform:(CGAffineTransformMakeRotation([self autoRotateAngleWithDistin:fishMoveDestinPoint]))];
+                [child setTransform:(CGAffineTransformMakeRotation([self autoRotateAngleWithDistin:fishMoveDestinPoint]))];
+                mother.center = fishMoveDestinPoint;
 
             } completion:^(BOOL finished) {
-                [motherFish setTransform:(CGAffineTransformIdentity)];
-                [childFish setTransform:(CGAffineTransformIdentity)];
+                [mother setTransform:(CGAffineTransformIdentity)];
+                [child setTransform:(CGAffineTransformIdentity)];
                 isTouch = NO;
             }];
         }
@@ -136,7 +136,7 @@
 
 //获取屏幕点击位置的角度
 - (double)getAngleLocation:(CGPoint)locationPoint{
-    double pi = atan2(-motherFish.center.y + self.view.bounds.size.height/2,motherFish.center.x - self.view.bounds.size.width/2);
+    double pi = atan2(-mother.center.y + self.view.bounds.size.height/2,mother.center.x - self.view.bounds.size.width/2);
     double angle = pi * 180 / M_PI;
     NSLog(@"motherfish:%lf",angle);
         return angle;
@@ -239,9 +239,9 @@
 
     
 //初始化浮游物、小鱼、鱼妈妈
-    [self initWithMotherFishAddTo:self.view bodyRect:CGRectMake(0, 0, 50, 57) tailRect:CGRectMake(35, 6, 40, 45) fishContainer:CGRectMake(200, 400, 80, 60) fishEyeRect:CGRectMake(0, 0, 10, 10) rotateAngle:0];
-    [self initWithChildFishAddTo:self.view bodyRect:CGRectMake(0, 0, 35, 40) tailRect:CGRectMake(28, 5, 20, 30) fishContainer:CGRectMake(200, 400, 60, 40) fishEyeRect:CGRectMake(0, 0, 8, 8) rotateAngle:0];
-    [self initWithDustNumber:30];
+//    [self initWithMotherFishAddTo:self.view bodyRect:CGRectMake(0, 0, 50, 57) tailRect:CGRectMake(35, 6, 40, 45) fishContainer:CGRectMake(200, 400, 80, 60) fishEyeRect:CGRectMake(0, 0, 10, 10) rotateAngle:0];
+//    [self initWithChildFishAddTo:self.view bodyRect:CGRectMake(0, 0, 35, 40) tailRect:CGRectMake(28, 5, 20, 30) fishContainer:CGRectMake(200, 400, 60, 40) fishEyeRect:CGRectMake(0, 0, 8, 8) rotateAngle:0];
+//    [self initWithDustNumber:30];
 
 //计时器 鱼妈妈的随机移动 浮游物的左右移动 果实的的生成 碰撞检测 果实的向上移动
     timerMoveFish = [NSTimer scheduledTimerWithTimeInterval:2.f target:self selector:@selector(moveFish) userInfo:nil repeats:YES];
@@ -274,7 +274,7 @@
         NSLog(@"game over!");
         [self gameOver];
     }else{
-        childBody.image = babyFades[lifecount];
+        child.body.image = babyFades[lifecount];
     }
 }
 
@@ -283,8 +283,8 @@
     if (isStopFishRandomMove && !iswellcomeNoTouch) {
         isTouch = YES;
         [UIView animateWithDuration:2.f animations:^{
-            motherFish.center = fishMoveDestinPoint;
-            childFish.center = fishMoveDestinPoint;
+            mother.center = fishMoveDestinPoint;
+            child.center = fishMoveDestinPoint;
         } completion:^(BOOL finished) {
            
             isTouch = NO;
@@ -296,8 +296,8 @@
         isTouch = NO;
 
         [UIView animateWithDuration:2.f animations:^{
-            motherFish.center = CGPointMake(randomX, randomY);
-            childFish.center = CGPointMake(randomX + 60, randomY);
+            mother.center = CGPointMake(randomX, randomY);
+            child.center = CGPointMake(randomX + 60, randomY);
         } completion:^(BOOL finished) {
             isTouch = YES;
         }];
@@ -307,11 +307,11 @@
 //自动旋转头部角度
 - (CGFloat)autoRotateAngleWithDistin:(CGPoint)tapPoint{
     CGFloat angle = 0;
-    if (motherFish.center.x < tapPoint.x && motherFish.center.y > tapPoint.y) {
+    if (mother.center.x < tapPoint.x && mother.center.y > tapPoint.y) {
         angle = -( M_PI+M_PI_4);
-    }else if(motherFish.center.x < tapPoint.x && motherFish.center.y < tapPoint.y){
+    }else if(mother.center.x < tapPoint.x && mother.center.y < tapPoint.y){
         angle = M_PI_4+M_PI;
-    }else if (motherFish.center.x > tapPoint.x && motherFish.center.y > tapPoint.y){
+    }else if (mother.center.x > tapPoint.x && mother.center.y > tapPoint.y){
         angle = M_PI_4;
     }else{
         angle = -M_PI_4;
@@ -362,7 +362,7 @@
     if (!isTouch) {
         for (UIImageView *food in fruits) {
             if (food.tag == 1) {
-                double distance = [self caculaterBetweenPoint:food.center pointT:motherFish.center];
+                double distance = [self caculaterBetweenPoint:food.center pointT:mother.center];
                 if (distance < 40) {
                     food.tag = 0;
                     if ([food.accessibilityIdentifier  isEqual: @"blue"]) {
@@ -381,12 +381,12 @@
                         } completion:^(BOOL finished) {
                             
                             [food removeFromSuperview];
-                            motherBody.image = bigSwimBlueS[motherFishEatCount];
+                            mother.body.image = mother.swimBlues[motherFishEatCount];
                         }];
                 }
             }
         }
-    }else if ([self caculaterBetweenPoint:childFish.center pointT:motherFish.center] == 10){
+    }else if ([self caculaterBetweenPoint:child.center pointT:mother.center] == 10){
         lifecount -= motherFishEatCount;
         if (lifecount < 0) {
             lifecount = 0;
@@ -433,123 +433,100 @@
 }
 
 //child fish 的初始化
-- (void)initWithChildFishAddTo:(UIView*)superview bodyRect:(CGRect)rectB tailRect:(CGRect)rectT fishContainer:(CGRect)rectC fishEyeRect:(CGRect)rectE rotateAngle:(float)angle{
-    babyEyes = [NSMutableArray array];
+- (void)initChildWith:(CGRect)frame rotateAngle:(float)angle at:(UIView*)superview {
+    child = [[LFFish alloc]initWithFrame:frame];//200 400 60 40
+    [superview addSubview:child];
+    [child setTransform:(CGAffineTransformMakeRotation(angle))];
+    child.eyes = [NSMutableArray array];
     for ( int i = 0; i < 2; i++) {
         UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"babyEye%d",i]];
         if (img) {
-            [babyEyes addObject:img];
+            [child.eyes addObject:img];
         }
     }
-    
-    
-    babyFades = [NSMutableArray array];
+    child.lives = [NSMutableArray array];
     for (int i = 0; i < 20; i++) {
-        
         UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"babyFade%d",i]];
         if (img) {
-            [babyFades addObject:img];
+            [child.lives addObject:img];
         }
     }
-    
-    babyTails = [NSMutableArray array];
+
+    child.tails = [NSMutableArray array];
     for (int i = 0; i < 8; i++) {
         UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"babyTail%d",i]];
         if (img) {
-            [babyTails addObject:img];
+            [child.tails addObject:img];
         }
     }
-    
-    childFish = [[UIView alloc]initWithFrame:rectC];//200 400 60 40
-    [superview addSubview:childFish];
-    [childFish setTransform:(CGAffineTransformMakeRotation(angle))];
-    
-    childBody = [[UIImageView alloc]init];
-    childBody.image = [UIImage imageNamed:@"babyFade0"];
-    childBody.frame = rectB;//0 0 35 40
-    [childFish addSubview:childBody];
-    
-    childTail = [[UIImageView alloc]init];
-    childTail.frame = rectT;//0 0 20 30
-    childTail.image = [UIImage imageNamed:@"babyTail0"];
-    childTail.animationImages = babyTails;
-    childTail.animationRepeatCount = -1;
-    childTail.animationDuration = 1.0;
-    [childTail startAnimating];
-    [childFish addSubview:childTail];
-    
-    childEye = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"babyEye0"]];
-    childEye.frame = rectE;//0 0 8 8
-    childEye.center = CGPointMake(childBody.center.x, childBody.center.y);
-    childEye.animationImages = babyEyes;
-    childEye.animationRepeatCount = -1;
-    childEye.animationDuration = 1.5;
-    [childEye startAnimating];
-    [childFish addSubview:childEye];
+
+    child.body.image = [UIImage imageNamed:@"babyFade0"];
+    child.tail.image = [UIImage imageNamed:@"babyTail0"];
+    child.tail.animationImages = child.tails;
+    child.tail.animationRepeatCount = -1;
+    child.tail.animationDuration = 1.0;
+    [child.tail startAnimating];
+
+    child.eye.image = [UIImage imageNamed:@"babyEye0"];
+    child.eye.animationImages = child.eyes;
+    child.eye.animationRepeatCount = -1;
+    child.eye.animationDuration = 1.5;
+    [child.eye startAnimating];
 
 }
 
 //mother fish 的初始化
 - (void)initWithMotherFishAddTo:(UIView*)superview bodyRect:(CGRect)rectB tailRect:(CGRect)rectT fishContainer:(CGRect)rectC fishEyeRect:(CGRect)rectE rotateAngle:(float)angle{
-    bigTails = [NSMutableArray array];
+    mother = [[LFFish alloc]initWithFrame:rectC];//200 400 80 60
+    [superview addSubview:mother];
+    isStopFishRandomMove = NO;
+    [mother setTransform:(CGAffineTransformMakeRotation(angle))];
+    mother.tails = [NSMutableArray array];
     for (int i = 0; i < 8; i++) {
         UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"bigTail%d",i]];
         if (img) {
-            [bigTails addObject:img];
-            
-        }
-    }
-    
-    bigEyes = [NSMutableArray array];
-    for (int i = 0; i < 2; i++) {
-        UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"bigEye%d",i]];
-        if (img) {
-            [bigEyes addObject:img];
-        }
-    }
-    
-    bigSwimS = [NSMutableArray array];
-    for (int i =0; i < 8; i++) {
-        UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"bigSwim%d",i]];
-        if (img) {
-            [bigSwimS addObject:img];
-        }
-    }
-    
-    bigSwimBlueS = [NSMutableArray array];
-    for (int i = 0; i < 8; i++) {
-        UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"bigSwimBlue%d",i]];
-        if (img) {
-            [bigSwimBlueS addObject:img];
+            [mother.tails addObject:img];
+
         }
     }
 
-    motherFish = [[UIView alloc]initWithFrame:rectC];//200 400 80 60
-    [superview addSubview:motherFish];
-    isStopFishRandomMove = NO;
-    [motherFish setTransform:(CGAffineTransformMakeRotation(angle))];
-    
-    motherBody = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"bigSwim0"]];
-    motherBody.frame = rectB;//50 57
-    [motherFish addSubview:motherBody];
-    
-    
-    motherTail = [[UIImageView alloc]initWithFrame:rectT];//40 45
-    motherTail.image = [UIImage imageNamed:@"bigTail0"];
-    [motherTail setAnimationImages:bigTails];
-    motherTail.animationDuration = 0.5;
-    motherTail.animationRepeatCount = -1;
-    [motherTail startAnimating];
-    [motherFish addSubview:motherTail];
-    
-    motherEye = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"babyEye0"]];
-    motherEye.frame = rectE;// 10 10
-    motherEye.center = motherBody.center;
-    motherEye.animationImages = bigEyes;
-    motherEye.animationDuration = 2.f;
-    motherEye.animationRepeatCount = -1;
-    [motherEye startAnimating];
-    [motherBody addSubview:motherEye];
+    mother.eyes = [NSMutableArray array];
+    for (int i = 0; i < 2; i++) {
+        UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"bigEye%d",i]];
+        if (img) {
+            [mother.eyes addObject:img];
+        }
+    }
+
+    mother.swimReds = [NSMutableArray array];
+    for (int i =0; i < 8; i++) {
+        UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"bigSwim%d",i]];
+        if (img) {
+            [mother.swimReds addObject:img];
+        }
+    }
+
+    mother.swimBlues = [NSMutableArray array];
+    for (int i = 0; i < 8; i++) {
+        UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"bigSwimBlue%d",i]];
+        if (img) {
+            [mother.swimBlues addObject:img];
+        }
+    }
+
+    mother.body.image = [UIImage imageNamed:@"bigSwim0"];
+    mother.tail.image = [UIImage imageNamed:@"bigTail0"];
+    [mother.tail setAnimationImages:mother.tails];
+    mother.tail.animationDuration = 0.5;
+    mother.tail.animationRepeatCount = -1;
+    [mother.tail startAnimating];
+
+    mother.eye.image = [UIImage imageNamed:@"babyEye0"];
+    mother.eye.center = mother.body.center;
+    mother.eye.animationImages = mother.eyes;
+    mother.eye.animationDuration = 2.f;
+    mother.eye.animationRepeatCount = -1;
+    [mother.eye startAnimating];
 
 }
 
@@ -624,7 +601,7 @@
     
     //添加mother fish 和 child fish
     [self initWithMotherFishAddTo:self.view bodyRect:CGRectMake(0, 0, 100, 100) tailRect:CGRectMake(80, 18, 40, 70) fishContainer:CGRectMake(width/2-100, height-600, 150, 150) fishEyeRect:CGRectMake(0, 0, 15, 15) rotateAngle:M_PI_4];
-    [self initWithChildFishAddTo:self.view bodyRect:CGRectMake(0, 0, 50, 50) tailRect:CGRectMake(40, 5, 20, 40) fishContainer:CGRectMake(width/2-30, height-500, 80, 50) fishEyeRect:CGRectMake(0, 0, 10, 10) rotateAngle:M_PI_4];
+    [self initChildWith:CGRectMake(width/2-30, height-500, 41, 46) rotateAngle:M_PI_4 at:self.view];
     
     
     [self addShapLayerWithOpacity:0.3];
@@ -698,12 +675,12 @@
 - (void)startAction:(UIButton*)sender{
     [self playSound];
    [UIView animateWithDuration:1.f animations:^{
-       [motherFish setTransform:(CGAffineTransformIdentity)];
+       [mother setTransform:(CGAffineTransformIdentity)];
    } completion:^(BOOL finished) {
        [UIView animateWithDuration:2.f animations:^{
-           [childFish setTransform:CGAffineTransformIdentity];
-           [motherFish setFrame:CGRectMake(-400, motherFish.center.y, motherFish.bounds.size.width, motherFish.bounds.size.height)];
-           [childFish setFrame:CGRectMake(-80, childFish.center.y+50, childFish.bounds.size.width, childFish.bounds.size.height)];
+           [child setTransform:CGAffineTransformIdentity];
+           [mother setFrame:CGRectMake(-400, mother.center.y, mother.bounds.size.width, mother.bounds.size.height)];
+           [child setFrame:CGRectMake(-80, child.center.y+50, child.bounds.size.width, child.bounds.size.height)];
            [logoLabel setAlpha:0];
            [labChildSay setAlpha:0];
            [labMomSay setAlpha:0];

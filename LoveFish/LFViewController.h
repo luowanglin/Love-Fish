@@ -10,7 +10,7 @@
 //#import <QuartzCore/QuartzCore.h>
 #import <AVFoundation/AVFoundation.h>
 
-@interface ViewController : UIViewController
+@interface LFViewController : UIViewController
 
 
 @end
